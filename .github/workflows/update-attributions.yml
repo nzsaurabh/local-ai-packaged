@@ -1,0 +1,45 @@
+name: Update Attributions (Contributors and Licenses)
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 0 * * 0'  # Every Sunday at midnight UTC
+
+jobs:
+  update-attributions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install pip-licenses
+        run: pip install pip-licenses
+
+      - name: Generate CONTRIBUTORS.txt
+        run: |
+          git shortlog -sne > CONTRIBUTORS.txt
+
+      - name: Install dependencies
+        run: |
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+
+      - name: Generate THIRD_PARTY_LICENSES.md
+        run: |
+          pip-licenses --format=markdown --with-authors --with-urls --output-file=THIRD_PARTY_LICENSES.md
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add CONTRIBUTORS.txt THIRD_PARTY_LICENSES.md
+          git commit -m "Update contributors and third-party licenses [skip ci]" || echo "No changes to commit"
+          git push
