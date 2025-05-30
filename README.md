@@ -368,3 +368,7 @@ interact with the local filesystem.
 
 This project (originally created by the n8n team, link at the top of the README) is licensed under the Apache License 2.0 - see the
 [LICENSE](LICENSE) file for details.
+
+## About This Fork
+
+This project is a modified version of [coleam00/local-ai-packaged](https://github.com/coleam00/local-ai-packaged) and is licensed under the Apache 2.0 License. See `LICENSE` for details.
